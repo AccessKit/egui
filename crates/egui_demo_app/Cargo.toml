@@ -42,7 +42,7 @@ chrono = { version = "0.4", default-features = false, features = [
   "wasmbind",
 ] }
 eframe = { workspace = true, default-features = false, features = [
-  "web_screen_reader",
+  "accesskit",
 ] }
 egui = { workspace = true, features = ["callstack", "default", "log"] }
 egui_demo_lib = { workspace = true, features = ["default", "chrono"] }
