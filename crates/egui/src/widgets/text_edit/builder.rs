@@ -751,7 +751,7 @@ impl<'t> TextEdit<'t> {
 
                 builder.set_default_action_verb(accesskit::DefaultActionVerb::Focus);
                 if self.multiline {
-                    builder.set_multiline();
+                    builder.set_role(accesskit::Role::MultilineTextInput);
                 }
 
                 parent_id

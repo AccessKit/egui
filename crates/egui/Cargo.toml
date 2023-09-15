@@ -85,7 +85,7 @@ ahash = { version = "0.8.1", default-features = false, features = [
 nohash-hasher = "0.2"
 
 #! ### Optional dependencies
-accesskit = { version = "0.11", optional = true }
+accesskit = { path = "../../../accesskit/common", optional = true }
 
 backtrace = { version = "0.3", optional = true }
 
