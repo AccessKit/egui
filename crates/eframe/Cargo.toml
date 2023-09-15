@@ -42,7 +42,7 @@ default = [
 ]
 
 ## Enable platform accessibility API implementations through [AccessKit](https://accesskit.dev/).
-accesskit = ["egui/accesskit", "egui-winit/accesskit"]
+accesskit = ["accesskit_web", "egui/accesskit", "egui-winit/accesskit"]
 
 # Allow crates to choose an android-activity backend via Winit
 # - It's important that most applications should not have to depend on android-activity directly, and can
@@ -246,6 +246,7 @@ web-sys = { workspace = true, features = [
 ] }
 
 # optional web:
+accesskit_web = { path = "../../../accesskit/platforms/web", optional = true }
 egui-wgpu = { workspace = true, optional = true } # if wgpu is used, use it without (!) winit
 wgpu = { workspace = true, optional = true, features = [
   # Let's enable some backends so that users can use `eframe` out-of-the-box

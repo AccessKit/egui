@@ -1,8 +1,18 @@
+#[cfg(feature = "accesskit")]
+use egui::accesskit;
 use egui::TexturesDelta;
 
 use crate::{epi, App};
 
 use super::{now_sec, text_agent::TextAgent, web_painter::WebPainter, NeedRepaint};
+
+#[cfg(feature = "accesskit")]
+struct StubActionHandler {}
+
+#[cfg(feature = "accesskit")]
+impl accesskit::ActionHandler for StubActionHandler {
+    fn do_action(&mut self, _request: accesskit::ActionRequest) {}
+}
 
 pub struct AppRunner {
     #[allow(dead_code)]
@@ -20,6 +30,8 @@ pub struct AppRunner {
     // Output for the last run:
     textures_delta: TexturesDelta,
     clipped_primitives: Option<Vec<egui::ClippedPrimitive>>,
+    #[cfg(feature = "accesskit")]
+    accesskit: accesskit_web::Adapter,
 }
 
 impl Drop for AppRunner {
@@ -114,6 +126,12 @@ impl AppRunner {
         let mut runner = Self {
             web_options,
             frame,
+            #[cfg(feature = "accesskit")]
+            accesskit: accesskit_web::Adapter::new(
+                canvas_id,
+                egui_ctx.clone(),
+                StubActionHandler {},
+            ),
             egui_ctx,
             painter,
             input: Default::default(),
@@ -253,7 +271,7 @@ impl AppRunner {
             mutable_text_under_cursor,
             ime,
             #[cfg(feature = "accesskit")]
-                accesskit_update: _, // not currently implemented
+            accesskit_update,
         } = platform_output;
 
         super::set_cursor_icon(cursor_icon);
@@ -276,6 +294,11 @@ impl AppRunner {
                 "failed to update text agent position: {}",
                 super::string_from_js_value(&err)
             );
+        }
+
+        #[cfg(feature = "accesskit")]
+        if let Some(update) = accesskit_update {
+            self.accesskit.update_if_active(|| update);
         }
     }
 }
